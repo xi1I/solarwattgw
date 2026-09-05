@@ -38,10 +38,10 @@ def print_result():
     js["info"]=info
     js["jsin"]= []
     
-    print "Content-Type: text/plain;charset=utf-8"
-    print
+    print("Content-Type: text/plain;charset=utf-8")
+    print()
     
-    print json.dumps(js)
+    print(json.dumps(js))
 
 #end print_result
 
@@ -51,7 +51,7 @@ try:
     newName=form.getvalue("config","")
     dprint(newName)
 
-except Exception,e:
+except Exception as e:
     dprint (e)
     info=e
     action="ACTION_NOK"
@@ -86,7 +86,7 @@ try:
     os.system(ex)
     
     action="ACTION_OK"
-except Exception,e:
+except Exception as e:
     dprint (e)
     info=repr(e)
     action="ACTION_NOK"

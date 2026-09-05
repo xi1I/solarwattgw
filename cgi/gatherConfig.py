@@ -154,7 +154,7 @@ def checkConfig():
 
   for i in ifs:
 
-      if not js.has_key(i.name):
+      if i.name not in js:
          js[i.name]={}
       #endif
 
@@ -174,9 +174,9 @@ def checkConfig():
       available_sids={}
       actSID=""
       try:
-           s=subprocess.check_output(['/sbin/ifconfig','wlan0'])
+           s=subprocess.check_output(['/sbin/ifconfig','wlan0'], text=True)
            info=s.split("\n")[1]
-           s2=subprocess.check_output(['iwlist', 'wlan0', 'scan'])
+           s2=subprocess.check_output(['iwlist', 'wlan0', 'scan'], text=True)
 
            s2lines=s2.split('\n')
            for line in s2lines:
@@ -218,17 +218,17 @@ def checkConfig():
   #DNS:
   js["DNS"]=""
   try:
-       s=subprocess.check_output(['cat','/etc/resolv.conf'])
-       info=s.split("\n")
+      s=subprocess.check_output(['cat','/etc/resolv.conf'], text=True)
+      info=s.split("\n")
 
-       for l in info:
-         ind=l.find("nameserver")
-         
-         if ind>=0:
-           js["DNS"]=l[ind+11:]
-         #endif
+      for l in info:
+        ind=l.find("nameserver")
 
-       #end for
+        if ind>=0:
+          js["DNS"]=l[ind+11:]
+        #endif
+
+      #end for
   except:
        pass
   #end try
@@ -238,7 +238,7 @@ def checkConfig():
 
   #Systeminfos:
   try:
-      js["HOSTTIME"]=subprocess.check_output(['date','+%Y-%m-%d:%H:%M:%S']).split("\n")[0]
+      js["HOSTTIME"]=subprocess.check_output(['date','+%Y-%m-%d:%H:%M:%S'], text=True).split("\n")[0]
   except:
       js["HOSTTIME"]=""
   #end try
@@ -273,7 +273,7 @@ def checkConfig():
   #Routing
 
   try:
-      routing=subprocess.check_output(['route',])
+      routing=subprocess.check_output(['route',], text=True)
       js["ROUTING"]=routing
   except:
       js["ROUTING"]=""
@@ -326,12 +326,12 @@ def checkConfig():
     try:
         outf.write(json.dumps(js))
         outf.close()
-        print "wrote to file /tmp/mrconfig.txt"
+        print("wrote to file /tmp/mrconfig.txt")
     except:
-        print "can not open file /tmp/mrconfig.txt"
+        print("can not open file /tmp/mrconfig.txt")
     #end try
   else:
-    print "can not open file /tmp/mrconfig.txt"
+    print("can not open file /tmp/mrconfig.txt")
   
   #endif
 

@@ -6,14 +6,15 @@
 import os
 import cgi
 import json
+import html
 
 # enable debugging
 import cgitb
 cgitb.enable()
 
-print "Content-Type: text/plain;charset=utf-8"
-print
-print {} 
+print("Content-Type: text/plain;charset=utf-8")
+print()
+print({})
 
 f=open("/tmp/mrconfig.txt","r")
 
@@ -22,15 +23,15 @@ if f:
   f.close()
   js=json.loads(js1)
 
-  js["REMOTE_ADDR"] = cgi.escape(os.environ.get("REMOTE_ADDR",""))
+  js["REMOTE_ADDR"] = html.escape(os.environ.get("REMOTE_ADDR",""))
   js["USER_AGENT"] = os.environ.get("HTTP_USER_AGENT","")
   
 else:
   js={}
 #endif
-print "Content-Type: text/plain;charset=utf-8"
-print
-print json.dumps(js)
+print("Content-Type: text/plain;charset=utf-8")
+print()
+print(json.dumps(js))
 
 
 

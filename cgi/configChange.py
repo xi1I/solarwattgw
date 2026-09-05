@@ -76,10 +76,10 @@ def print_result():
     js["info"]=info
     js["jsin"]= [phys,logical,ip,netmask,gateway,sid,pw,mode]
 
-    print "Content-Type: text/plain;charset=utf-8"
-    print
+    print("Content-Type: text/plain;charset=utf-8")
+    print()
     
-    print json.dumps(js)
+    print(json.dumps(js))
     
 #end print_result
 
@@ -107,7 +107,7 @@ def writeToOutfile(outfile):
             info+=" "
             info+="sudo /bin/cp %s %s"%(outfile,configfile)
             if ret!=0:
-                raise ("os error")
+                raise OSError("os error")
             #endif
             action="ACTION_OK"
             detail="IN_PROGRESS"

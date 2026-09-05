@@ -8,10 +8,9 @@ LOGFILENAME="/tmp/PGDHttpServer.log"
 
 DEFAULTFILE="/home/work/SW/HttpServerData/BMSData.shtml"
 
-import SimpleHTTPServer
-from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
-from SocketServer import ThreadingMixIn
-from urlparse import urlparse,parse_qs
+from http.server import HTTPServer, BaseHTTPRequestHandler
+from socketserver import ThreadingMixIn
+from urllib.parse import parse_qs, urlparse
 import threading
 import datetime,time
 
@@ -43,7 +42,7 @@ class Handler(BaseHTTPRequestHandler):
 
         try:
             fd=open(wantedfile,"r")
-        except Exception,e:
+        except Exception as e:
             fd=None
         #end try
         
@@ -51,9 +50,9 @@ class Handler(BaseHTTPRequestHandler):
             self.send_response(404)
             self.send_header('Content-type', 'text/plain') 
             self.end_headers()
-            message =  threading.currentThread().getName() + \
+            message =  threading.current_thread().name + \
                        " %s NOT FOUND" % (wantedfile)
-            self.wfile.write(message)                
+            self.wfile.write(message.encode("utf-8"))
         else:
             dprint ("begin read %s"%wantedfile)
             data=fd.read()
@@ -63,7 +62,7 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header('Content-type', 'text/plain') 
             self.end_headers()
             message =  "%s" % (data,)
-            self.wfile.write(message)
+            self.wfile.write(message.encode("utf-8"))
             ok=True
             fd.close()
         #endif
