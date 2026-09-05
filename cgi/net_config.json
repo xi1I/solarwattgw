@@ -1,0 +1,32 @@
+{
+    "WANTED_CONN_TYPE":"eth0",
+    "ACT_GATEWAY":"",
+    "PREF_INTERFACE":"",
+    
+    "eth0":{
+	"WANTED_CONN":"DHCP",
+	"WANTED_IP":"",
+	"WANTED_NETMASK":"",
+	"WANTED_GATEWAY":"",
+	"ACT_IP":"",
+	"ACT_NETMASK":"",
+	"MAC": "AUTO",
+	"IS_UP": 1
+    },
+
+    "wlan0":{
+	"WANTED_CONN":"DHCP",
+	"WANTED_IP":"",
+	"WANTED_NETMASK":"",
+	"WANTED_GATEWAY":"",
+	"ACT_IP":"",
+	"ACT_NETMASK":"",
+	"MAC": "AUTO",
+	"IS_UP": 0,
+	"SID": "unknown",
+	"PW": "unknown"
+    },
+    "MYRESERVE_NAME":"",
+    "MYRESERVE_PW":""
+    
+}

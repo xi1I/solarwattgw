@@ -1,0 +1,13 @@
+[Unit]
+Description=network config gatherer for ConfigGui 
+Wants=network-online.target
+After=network-online.target
+Requires=apache2.service
+
+[Service]
+Type=simple
+ExecStart= /home/work/SW/cgi/startGatherConfig
+Restart=on-abort
+
+[Install]
+WantedBy=network-online.target

@@ -1,0 +1,3 @@
+#!/bin/bash
+cd /home/work/SW/Sender 
+python receiveBLE.py 

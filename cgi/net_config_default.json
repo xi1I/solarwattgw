@@ -1,0 +1,12 @@
+{
+    "connection": "eth0",
+    "WANTED_IP":"DHCP",
+    "WANTED_NETMASK":"AUTO",
+    "WANTED_GATEWAY":"AUTO",
+    "ACT_IP":"DHCP",
+    "ACT_NETMASK":"AUTO",
+    "ACT_GATEWAY":"AUTO",
+    "MAC_ETH0": "AUTO",
+    "MAC_WLAN0": "AUTO"
+    
+}

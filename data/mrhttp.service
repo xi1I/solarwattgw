@@ -1,0 +1,13 @@
+[Unit]
+Description=HttpServer for MYReserve data
+Wants=network-online.target
+After=network-online.target
+Requires=myreserve.service
+
+[Service]
+Type=simple
+ExecStart= /home/work/SW/HttpServerData/startHttpServer
+Restart=on-abort
+
+[Install]
+WantedBy=network-online.target

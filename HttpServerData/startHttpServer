@@ -1,0 +1,10 @@
+#!/bin/bash
+if [ -f /home/work/SW/HttpServerData/PDGHttServerRasp.py ]
+then
+   echo PDGHttServerRasp starting
+   cd /home/work/SW/HttpServerData/
+   python /home/work/SW/HttpServerData/PDGHttServerRasp.py
+   echo PDGHttServerRasp stopped
+else
+   echo PDGHttServerRasp FAILED
+fi

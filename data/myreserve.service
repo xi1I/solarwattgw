@@ -1,0 +1,11 @@
+[Unit]
+Description=Sender of MYReserve data
+After=multi-user.target
+ 
+[Service]
+Type=simple
+ExecStart= /home/work/SW/Sender/startSender
+Restart=on-abort
+ 
+[Install]
+WantedBy=multi-user.target
