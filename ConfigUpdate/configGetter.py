@@ -20,7 +20,7 @@ Svnid="$Id: configGetter.py 1962 2017-07-06 12:33:53Z irvn $"
 ######################
 # Imports
 ######################
-import sys, os, time,socket
+import sys
 from subprocess import call
 
 import configIntern

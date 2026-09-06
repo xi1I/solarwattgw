@@ -3,11 +3,12 @@
 
 
 
-import os,sys
+import sys
 import time
 import cgi
 import json
 import datetime
+import subprocess
 
 # enable debugging
 import cgitb
@@ -56,10 +57,10 @@ wep_template='priority=10\n'\
 
 template_dhcp='iface IFACE inet dhcp\n'
 template_static=\
-                 'iface IFACE inet static\n'\
-                 'address ADDRESS\n'\
-                 'netmask NETMASK\n'\
-                 'gateway GW\n'
+    'iface IFACE inet static\n'\
+    'address ADDRESS\n'\
+    'netmask NETMASK\n'\
+    'gateway GW\n'
 
 def dprint(s):
     f=open(LOGFILE,"a")
@@ -87,7 +88,7 @@ def print_result():
 def writeToOutfile(outfile):
     global info,action,detail
     dprint ("writeToOutfile 1 %s"%outfile)
-    os.system("sudo /bin/chmod o+rw %s" % (outfile,))
+    subprocess.run(["sudo", "/bin/chmod", "o+rw", outfile], check=False)
     dprint ("writeToOutfile 2 %s"%outfile)
     try:
         fo=open (outfile,"w")
@@ -102,7 +103,10 @@ def writeToOutfile(outfile):
         fo.close()
         
         try:
-            ret=os.system("sudo /bin/cp %s %s"%(outfile,configfile))
+            ret=subprocess.run(
+                ["sudo", "/bin/cp", outfile, configfile],
+                check=False,
+            ).returncode
             info+=repr(ret)
             info+=" "
             info+="sudo /bin/cp %s %s"%(outfile,configfile)
@@ -164,8 +168,8 @@ if phys==WIFI:
     #first handle wpa_supplicant
     configfile="/etc/wpa_supplicant/wpa_supplicant.conf"
     outfile="/tmp/wpa_supplicant.conf"
-    os.system("sudo /bin/cp %s %s" % (configfile,outfile))
-    os.system("sudo /bin/chmod o+rw %s" % (outfile,))
+    subprocess.run(["sudo", "/bin/cp", configfile, outfile], check=False)
+    subprocess.run(["sudo", "/bin/chmod", "o+rw", outfile], check=False)
     fd=open(outfile,"r")
     if fd:
         lines=fd.readlines()
@@ -212,8 +216,8 @@ if action=="ACTION_OK":
 
     configfile="/etc/network/interfaces"
     outfile="/tmp/interfaces"
-    os.system("sudo /bin/cp %s %s" % (configfile,outfile))
-    os.system("sudo /bin/chmod o+rw %s" % (outfile,))
+    subprocess.run(["sudo", "/bin/cp", configfile, outfile], check=False)
+    subprocess.run(["sudo", "/bin/chmod", "o+rw", outfile], check=False)
     fd=open(outfile,"r")
     if fd:
         lines=fd.readlines()
@@ -276,7 +280,7 @@ sys.stdout.flush()
 
 if action == "ACTION_OK":
     time.sleep(3)
-    os.system("sudo /sbin/reboot")
+    subprocess.run(["sudo", "/sbin/reboot"], check=False)
 #endif
 sys.exit(0)
 

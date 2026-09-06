@@ -3,11 +3,12 @@
 
 
 
-import os,sys
+import sys
 import time
 import cgi
 import json
 import datetime
+import subprocess
 
 # enable debugging
 #import cgitb
@@ -78,12 +79,16 @@ else:
 #endif
 
 try:
-    ex='echo "%s" > %s' % (newName,OUTFILE,)
-    dprint(ex)
-    os.system(ex)
-    ex="/etc/init.d/hostname.sh"
-    dprint(ex)
-    os.system(ex)
+    dprint("write hostname to %s" % OUTFILE)
+    subprocess.run(
+        ["sudo", "/usr/bin/tee", OUTFILE],
+        input=(newName + "\n").encode(),
+        stdout=subprocess.DEVNULL,
+        check=True,
+    )
+    hostname_script="/etc/init.d/hostname.sh"
+    dprint(hostname_script)
+    subprocess.run([hostname_script], check=True)
     
     action="ACTION_OK"
 except Exception as e:
@@ -99,7 +104,7 @@ print_result()
 sys.stdout.flush()
 if action == "ACTION_OK":
     time.sleep(3)
-    os.system("sudo /sbin/reboot")
+    subprocess.run(["sudo", "/sbin/reboot"], check=False)
 #endif
             
 sys.exit()

@@ -3,11 +3,12 @@
 
 
 
-import os,sys
+import sys
 import time
 import cgi
 import json
 import datetime
+import subprocess
 
 # enable debugging
 #import cgitb
@@ -85,7 +86,7 @@ else:
 #endif
 
 try:
-    os.system("sudo /bin/chmod o+rw %s" % (OUTFILE,))
+    subprocess.run(["sudo", "/bin/chmod", "o+rw", OUTFILE], check=False)
     if newName == "default":
         fdj={}
     else:
@@ -115,7 +116,10 @@ print_result()
 sys.stdout.flush()
 if action == "ACTION_OK":
     time.sleep(3)
-    os.system("sudo systemctl restart myreserve.service")
+    subprocess.run(
+        ["sudo", "systemctl", "restart", "myreserve.service"],
+        check=False,
+    )
 #endif
             
 sys.exit()

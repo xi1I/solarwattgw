@@ -3,11 +3,12 @@
 
 
 
-import os,sys
+import sys
 import time
 import cgi
 import json
 import datetime
+import subprocess
 
 # enable debugging
 import cgitb
@@ -69,7 +70,7 @@ def print_result():
 def writeToOutfile(outfile):
     global info,action,detail
     dprint ("writeToOutfile 1 %s"%outfile)
-    os.system("sudo /bin/chmod o+rw %s" % (outfile,))
+    subprocess.run(["sudo", "/bin/chmod", "o+rw", outfile], check=False)
     dprint ("writeToOutfile 2 %s"%outfile)
     try:
         fo=open (outfile,"w")
@@ -84,7 +85,10 @@ def writeToOutfile(outfile):
         fo.close()
         
         try:
-            ret=os.system("sudo /bin/cp %s %s"%(outfile,configfile))
+            ret=subprocess.run(
+                ["sudo", "/bin/cp", outfile, configfile],
+                check=False,
+            ).returncode
             info+=repr(ret)
             info+=" "
             info+="sudo /bin/cp %s %s"%(outfile,configfile)
@@ -123,8 +127,8 @@ if action=="ACTION_OK":
    
     configfile="/etc/wpa_supplicant/wpa_supplicant.conf"
     outfile="/tmp/wpa_supplicant.conf"
-    os.system("sudo /bin/cp %s %s" % (configfile,outfile))
-    os.system("sudo /bin/chmod o+rw %s" % (outfile,))
+    subprocess.run(["sudo", "/bin/cp", configfile, outfile], check=False)
+    subprocess.run(["sudo", "/bin/chmod", "o+rw", outfile], check=False)
     fd=open(outfile,"r")
     if fd:
         lines=fd.readlines()
@@ -164,8 +168,8 @@ if action=="ACTION_OK":
     
     configfile="/etc/network/interfaces"
     outfile="/tmp/interfaces"
-    os.system("sudo /bin/cp %s %s" % (configfile,outfile))
-    os.system("sudo /bin/chmod o+rw %s" % (outfile,))
+    subprocess.run(["sudo", "/bin/cp", configfile, outfile], check=False)
+    subprocess.run(["sudo", "/bin/chmod", "o+rw", outfile], check=False)
     fd=open(outfile,"r")
     if fd:
         lines=fd.readlines()
@@ -218,8 +222,8 @@ if action=="ACTION_OK":
     
     configfile="/etc/network/interfaces"
     outfile="/tmp/interfaces"
-    os.system("sudo /bin/cp %s %s" % (configfile,outfile))
-    os.system("sudo /bin/chmod o+rw %s" % (outfile,))
+    subprocess.run(["sudo", "/bin/cp", configfile, outfile], check=False)
+    subprocess.run(["sudo", "/bin/chmod", "o+rw", outfile], check=False)
     fd=open(outfile,"r")
     if fd:
         lines=fd.readlines()
@@ -262,7 +266,7 @@ outfile="/home/work/SW/data/config_private.json"
 
 if action == "ACTION_OK":
     try:
-        os.system("sudo /bin/chmod o+rw %s" % (outfile,))
+        subprocess.run(["sudo", "/bin/chmod", "o+rw", outfile], check=False)
         fdj={}
             
         info=json.dumps(fdj)
@@ -288,12 +292,16 @@ newName="solarwattgw"
 
 if action == "ACTION_OK":
     try:
-        ex='echo "%s" > %s' % (newName,outfile,)
-        dprint(ex)
-        os.system(ex)
-        ex="/etc/init.d/hostname.sh"
-        dprint(ex)
-        os.system(ex)
+        dprint("write hostname to %s" % outfile)
+        subprocess.run(
+            ["sudo", "/usr/bin/tee", outfile],
+            input=(newName + "\n").encode(),
+            stdout=subprocess.DEVNULL,
+            check=True,
+        )
+        hostname_script="/etc/init.d/hostname.sh"
+        dprint(hostname_script)
+        subprocess.run([hostname_script], check=True)
     
         action="ACTION_OK"
     except Exception as e:
@@ -317,7 +325,7 @@ sys.stdout.flush()
 
 if action == "ACTION_OK":
     time.sleep(3)
-    os.system("sudo /sbin/reboot")
+    subprocess.run(["sudo", "/sbin/reboot"], check=False)
 #endif
 sys.exit(0)
 
